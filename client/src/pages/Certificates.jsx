@@ -30,7 +30,7 @@ export default function Certificates() {
       <div className="page-head">
         <div>
           <h1 className="page-title">Certificates</h1>
-          <p className="page-sub">{rows.length} certificates · earning containers per bill.</p>
+          <p className="page-sub">{rows.length} certificates · earning containers per bill</p>
         </div>
         <div className="stats" style={{ maxWidth: 640 }}>
           <div className="stat green"><div className="label">Grand Total</div><div className="value">{formatINR(summary.grand_total)}</div></div>
