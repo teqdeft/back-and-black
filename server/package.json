@@ -1,0 +1,33 @@
+{
+  "name": "mlm-hair-oil-server",
+  "version": "1.0.0",
+  "description": "Bill-tree MLM commission engine for an Ayurvedic hair-oil distribution platform",
+  "type": "commonjs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "migrate": "knex migrate:latest",
+    "rollback": "knex migrate:rollback --all",
+    "seed": "knex seed:run",
+    "setup": "npm run migrate && npm run seed",
+    "reset": "npm run rollback && npm run setup",
+    "test:engine": "node src/lib/engine.test.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^12.10.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.4.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "knex": "^3.1.0",
+    "morgan": "^1.10.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
