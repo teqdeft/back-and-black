@@ -71,7 +71,7 @@ export default function Orders() {
           <tbody>
             {loading ? (
               <tr><td colSpan={9} className="muted-center">Loading…</td></tr>
-            ) : data.rows.length === 0 ? (
+            ) : data?.rows?.length === 0 ? (
               <tr><td colSpan={9} className="muted-center">No orders found.</td></tr>
             ) : data.rows.map((o) => (
               <tr key={o.id}>
