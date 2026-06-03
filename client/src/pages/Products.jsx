@@ -11,7 +11,7 @@ export default function Products() {
 
   const load = useCallback(async () => {
     setLoading(true);
-    try { const { data } = await api.get('/products'); setRows(data.rows); setErr(''); }
+    try { const { data } = await api.get('/products'); setRows(data.rows || []); setErr(''); }
     catch (e) { setErr(apiError(e)); } finally { setLoading(false); }
   }, []);
   useEffect(() => { load(); }, [load]);

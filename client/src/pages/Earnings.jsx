@@ -15,7 +15,7 @@ export default function Earnings() {
     setLoading(true);
     try {
       const { data } = await api.get('/data/earnings', { params: { level, page, pageSize: 50 } });
-      setData(data); setErr('');
+      setData({ ...data, rows: data.rows || [] }); setErr('');
     } catch (e) { setErr(apiError(e)); }
     finally { setLoading(false); }
   }, [level, page]);

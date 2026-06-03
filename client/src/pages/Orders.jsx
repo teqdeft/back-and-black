@@ -19,7 +19,7 @@ export default function Orders() {
     setLoading(true);
     try {
       const { data } = await api.get('/orders', { params: { search, status, ref, page, pageSize: 20 } });
-      setData(data);
+      setData({ ...data, rows: data.rows || [] });
       setErr('');
     } catch (e) { setErr(apiError(e)); }
     finally { setLoading(false); }
@@ -52,7 +52,7 @@ export default function Orders() {
           onChange={(e) => { setSearch(e.target.value); setPage(1); }} style={{ flex: 1 }} />
         <select className="input" value={status} onChange={(e) => { setStatus(e.target.value); setPage(1); }}>
           <option value="">All statuses</option>
-          {DELIVERY?.map((d) => <option key={d} value={d}>{d}</option>)}
+          {DELIVERY.map((d) => <option key={d} value={d}>{d}</option>)}
         </select>
         <input className="input" placeholder="Filter by BA/BP/SE code" value={ref}
           onChange={(e) => { setRef(e.target.value); setPage(1); }} />
@@ -71,9 +71,9 @@ export default function Orders() {
           <tbody>
             {loading ? (
               <tr><td colSpan={9} className="muted-center">Loading…</td></tr>
-            ) : data?.rows?.length === 0 ? (
+            ) : data.rows.length === 0 ? (
               <tr><td colSpan={9} className="muted-center">No orders found.</td></tr>
-            ) : data?.rows?.map((o) => (
+            ) : data.rows.map((o) => (
               <tr key={o.id}>
                 <td className="cell-strong">#{o.bill_no}</td>
                 <td className="cell-muted">{(o.created_at || '').slice(0, 10)}</td>
@@ -94,7 +94,7 @@ export default function Orders() {
                 <td>
                   <select className="input" style={{ minWidth: 120 }} value={o.delivery_status}
                     onChange={(e) => updateDelivery(o.id, e.target.value)}>
-                    {DELIVERY?.map((d) => <option key={d} value={d}>{d.toUpperCase()}</option>)}
+                    {DELIVERY.map((d) => <option key={d} value={d}>{d.toUpperCase()}</option>)}
                   </select>
                 </td>
                 <td>
@@ -160,14 +160,14 @@ function ManualOrderModal({ onClose, onCreated }) {
         <div className="field"><label>State</label><input className="input" value={form.buyer_state} onChange={set('buyer_state')} /></div>
         <div className="field"><label>Product *</label>
           <select className="input" value={form.product_id} onChange={set('product_id')}>
-            {products?.map((p) => <option key={p.id} value={p.id}>{p.sku} — {p.name}</option>)}
+            {products.map((p) => <option key={p.id} value={p.id}>{p.sku} — {p.name}</option>)}
           </select>
         </div>
         <div className="field"><label>Qty</label><input className="input" type="number" min="1" value={form.qty} onChange={set('qty')} /></div>
         <div className="field"><label>Referred by (BA/BP/SE)</label>
           <select className="input" value={form.ref_user_id} onChange={set('ref_user_id')}>
             <option value="">— Owner (house order) —</option>
-            {participants?.map((u) => <option key={u.id} value={u.id}>{u.code} — {u.name}</option>)}
+            {participants.map((u) => <option key={u.id} value={u.id}>{u.code} — {u.name}</option>)}
           </select>
         </div>
         <div className="field"><label>Payment</label>

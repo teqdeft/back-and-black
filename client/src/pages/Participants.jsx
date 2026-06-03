@@ -15,7 +15,7 @@ export default function Participants() {
     setLoading(true);
     try {
       const { data } = await api.get('/users', { params: { role, search } });
-      setRows(data.rows); setErr('');
+      setRows(data.rows || []); setErr('');
     } catch (e) { setErr(apiError(e)); }
     finally { setLoading(false); }
   }, [role, search]);

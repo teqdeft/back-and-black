@@ -16,8 +16,8 @@ export default function Certificates() {
     setLoading(true);
     try {
       const { data } = await api.get('/certificates', { params: { role, search } });
-      setRows(data.rows);
-      setSummary(data.summary);
+      setRows(data.rows || []);
+      setSummary(data.summary || {});
       setErr('');
     } catch (e) { setErr(apiError(e)); }
     finally { setLoading(false); }
