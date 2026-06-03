@@ -8,7 +8,7 @@ export default defineConfig({
     // Proxy API calls to the Express server in development (no CORS friction).
     proxy: {
       '/api': {
-        target: process.env.VITE_API_TARGET || 'http://localhost:4000',
+        target: 'https://backandblack.studioubique-dev.com' || 'http://localhost:4000',
         changeOrigin: true,
       },
     },
