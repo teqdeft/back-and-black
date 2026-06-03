@@ -52,16 +52,21 @@ async function creditWithOverflow(trx, {
     const cert = await trx('certificates').where({ bill_no: node.billNo }).first();
     if (!cert) continue; // no certificate on that bill yet
 
-    const room = cert.is_sink ? Infinity : round2(cert.capacity - cert.earned);
+    // mysql2/pg return DECIMAL columns as strings; coerce before any math so
+    // that '+' adds numbers instead of concatenating strings.
+    const certEarned = Number(cert.earned) || 0;
+    const certCapacity = Number(cert.capacity) || 0;
+
+    const room = cert.is_sink ? Infinity : round2(certCapacity - certEarned);
     if (room <= 0) continue; // full — skip to next ancestor
 
     const credit = cert.is_sink ? remaining : round2(Math.min(remaining, room));
     const overflow = round2(remaining - credit);
-    const newEarned = round2(cert.earned + credit);
+    const newEarned = round2(certEarned + credit);
 
     await trx('certificates').where({ id: cert.id }).update({
       earned: newEarned,
-      status: !cert.is_sink && newEarned >= cert.capacity ? 'full' : cert.status,
+      status: !cert.is_sink && newEarned >= certCapacity ? 'full' : cert.status,
       updated_at: trx.fn.now(),
     });
 
@@ -86,7 +91,7 @@ async function creditWithOverflow(trx, {
     const sink = await trx('certificates').where({ id: sinkCertId }).first();
     if (sink) {
       await trx('certificates').where({ id: sink.id }).update({
-        earned: round2(sink.earned + remaining),
+        earned: round2(Number(sink.earned) + remaining),
         updated_at: trx.fn.now(),
       });
       await trx('earnings').insert({

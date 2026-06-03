@@ -44,6 +44,9 @@ const configs = {
       user: process.env.DB_USER || 'root',
       password: process.env.DB_PASSWORD || '',
       database: process.env.DB_NAME || 'mlm_hair_oil',
+      // Return DECIMAL columns as JS numbers (not strings) so money math adds
+      // instead of concatenating. The engine also coerces defensively.
+      decimalNumbers: true,
     },
   },
   pg: {
